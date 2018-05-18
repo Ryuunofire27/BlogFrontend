@@ -1,0 +1,24 @@
+{
+  "name": "blog-frontend",
+  "version": "1.0.0",
+  "description": "Frontend del blog utilizando React.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryuunofire27/BlogFrontend.git"
+  },
+  "keywords": [
+    "blog",
+    "frontend",
+    "react-js"
+  ],
+  "author": "Charlie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ryuunofire27/BlogFrontend/issues"
+  },
+  "homepage": "https://github.com/Ryuunofire27/BlogFrontend#readme"
+}
