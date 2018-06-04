@@ -5,16 +5,9 @@ class CardsContent extends PureComponent{
   render(){
     return(
       <div className="card-container">
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
-        <Card postData={this.props.postData}/>
+        {this.props.posts ? this.props.posts.map((p) => {
+          return <Card key={p._id} postData={p}/>
+        }):  <div></div>}
       </div>
     );
   }

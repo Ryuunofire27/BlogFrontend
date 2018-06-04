@@ -2,7 +2,7 @@ import React from 'react';
 import Nav from './nav/Nav';
 import logo from './img/logo-node.png';
 
-class Header extends React.Component{
+class Header extends React.PureComponent{
   render(){
     return (
       <header>

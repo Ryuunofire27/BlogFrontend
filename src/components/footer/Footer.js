@@ -1,8 +1,14 @@
 import React from 'react';
 
-class Footer extends React.Component{
+class Footer extends React.PureComponent{
   render(){
-    return <h4> footer </h4>;   
+    return (
+      <footer className="footer">
+        <div className="derechos-reservados">
+          Todos los derechos reservados a Openlab&copy;
+        </div>
+      </footer>
+    );   
   }
 }
 

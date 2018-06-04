@@ -11,12 +11,16 @@ class NavUserArea extends PureComponent{
     };
 
     this.handleClick = this.handleClick.bind(this);
+    this.logout = this.logout.bind(this);
+    this.login = this.login.bind(this);
+  }
+
+  componentWillMount(){
+    this.setState({ user: this.props.user });
   }
 
   componentDidUpdate(){
-    this.setState({
-      user: this.props.user
-    });
+    this.setState({ user: this.props.user });
   }
 
   handleClick(){
@@ -26,8 +30,8 @@ class NavUserArea extends PureComponent{
   logout(){
     return (
       <div className="header-user-area" onClick={this.handleClick}>
-        <img className="header-user-area-img" src=""/>
-        <span className="header-user-area-span">Carlos Daniel Villagomez Rodriguezasdasdas</span>
+        <img className="header-user-area-img" src={this.state.user.picture}/>
+        <span className="header-user-area-span">Carlos Daniel Villagomez Rodriguez</span>
         <ul className={!this.state.isClicked ? "header-user-area-options-hidden" : "header-user-area-options"}>
           <li><Link to="/perfil">perfil</Link></li>
           <li><Link to="/logout">logout</Link></li>

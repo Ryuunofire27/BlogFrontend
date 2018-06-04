@@ -5,61 +5,61 @@ import Content from './contents/Content';
 import Footer from './footer/Footer';
 import { history } from 'react-router-dom';
 
+const AppContext = React.createContext();
+
 class App extends React.Component{
-  constructor(props){
-    super(props);
-    
-    this.state = {
-      user: null,
-    }
 
-    this.loginController = this.loginController.bind(this);
-    this.logoutController = this.logoutController.bind(this);
+  state = {
+    user: null,
   }
 
-  componentDidMount(){
-    const username = localStorage.getItem('username');
-    const password = localStorage.getItem('password')
-    let user = null;
-    if(username && password){
-      user = {
-        username,
-        password
-      }
+  app = {
+    states: this.state,
+    fn: {
+      loginController: this.loginController,
+      logoutController: this.logoutController
     }
-    this.setState({user});
+  }
+  
+  componentWillMount(){
+    const user = localStorage.getItem('user');
+    this.setState({ user: JSON.parse(user) });
   }
 
-  loginController(username, password){
+  loginController = (username, password) => {
     if( username && password){
       axios
-        .post('http://localhost:8080/user/login', {username, password})
-        .then((res) => {
-          this.setState({user: res.data});
-          localStorage.setItem('username', this.state.user.username);
-          localStorage.setItem('password', this.state.user.password);
+        .request({
+          baseURL: 'http://localhost:8080/user',
+          url: '/login',
+          data: {username, password},
+          method: 'POST',
+          timeout: 3000 
         })
-        .catch(err => console.log(err));
+        .then((res) => {
+          this.setState({ user: res.data });
+          localStorage.setItem('user', JSON.stringify(this.state.user));
+        })
+        .catch(err => alert('Hay problema al iniciar sesion'));
     }else{
       console.log('campos vacios');
     }
   }
 
-  logoutController(){
+  logoutController = () => {
     this.setState({
       user: null
     });
-    localStorage.removeItem('username');
-    localStorage.removeItem('password');
+    localStorage.removeItem('user');
   }
 
   render(){
     return (
-      <div>
+      <AppContext.Provider value={app}>
         <Header user={this.state.user}/>
         <Content user={this.state.user} logoutController={this.logoutController} loginController={this.loginController}/>
         <Footer/>
-      </div>
+      </AppContext.Provider>
     );
   }
 }

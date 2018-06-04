@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom'
 import NavUserArea from './nav-user-area/NavUserArea';
 
-class Nav extends Component{
+class Nav extends PureComponent{
   render(){
     return (
       <nav id="nav">

@@ -1,34 +1,21 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import CardsContent from '../cards-content/CardsContent';
 import axios from 'axios';
-class Home extends Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      postData: null
+class Home extends PureComponent {
+  componentDidMount(){
+    if(!this.props.posts){
+      this.props.getPosts();
     }
   }
 
-  componentDidMount(){
-    this.initPost();
-  }
   initPost(){
-    console.log(location);
-    axios
-      .get('http://localhost:8080/post')
-      .then((res) => {
-        this.setState({
-          postData: res.data,
-        });
-      })
-      .catch(err => console.log(err))
+    this.props.getPosts();
   }
+  
   render(){
-    console.log(this.props.postData);
     return (
       <div>
-        <CardsContent postData={this.state.postData}/>
+        <CardsContent posts={this.props.posts}/>
       </div>
     );
   }
