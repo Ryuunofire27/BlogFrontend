@@ -1,21 +1,20 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom'
 import NavUserArea from './nav-user-area/NavUserArea';
+import { AppContext } from '../../AppContext';
 
-class Nav extends PureComponent{
-  render(){
-    return (
-      <nav id="nav">
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/admi">admi</Link></li>
-          <li><Link to="/admi">admi</Link></li>
-          <li><Link to="/admi">admi</Link></li>
-        </ul>
-        <NavUserArea user={this.props.user}/>
-      </nav>
-    );
-  }
-}
-
-export default Nav;
+export const Nav = () => {
+  return (
+    <nav id="nav">
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/admi">admi</Link></li>
+        <li><Link to="/admi">admi</Link></li>
+        <li><Link to="/admi">admi</Link></li>
+      </ul>
+      <AppContext.Consumer>
+        {app => <NavUserArea app={app}/>}
+      </AppContext.Consumer>
+    </nav>
+  );
+};

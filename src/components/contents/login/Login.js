@@ -2,31 +2,17 @@ import React, { PureComponent } from 'react';
 import { Redirect } from 'react-router-dom';
 import logo from '../../header/img/logo-node.png';
 class Login extends PureComponent{
-  constructor(props){
-    super(props);
 
-    this.state = {
-      username: null,
-      password: null
-    }
+  usernameRef = React.createRef();
+  psswRef = React.createRef();
 
-    this.loginController = this.loginController.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  loginController(e){
+  loginController = (e) =>{
     e.preventDefault();
-    this.props.loginController(this.state.username, this.state.password);
+    this.props.app.fn.loginController(this.usernameRef.current.value, this.psswRef.current.value);
   }
   
-  handleInputChange(e){
-    this.setState({
-      [e.target.name]: e.target.value 
-    });
-  }
-
-  renderLogin(){
-    return this.props.user ? <Redirect to="/"/> : (
+  renderLogin(user){
+    return user ? <Redirect to="/"/> : (
         <div className="login">
           <div className="login-img">
             <img src={logo}/>
@@ -34,12 +20,12 @@ class Login extends PureComponent{
           <form onSubmit={this.loginController}>
             <div>
               <span>Username</span>
-              <input type="text" name="username" placeholder="username" required onChange={this.handleInputChange}/>
+              <input type="text" name="username" placeholder="username" ref={this.usernameRef} required/>
             </div>
             <br/>
             <div>
               <span>Password</span>
-              <input type="password" name="password" placeholder="password" required onChange={this.handleInputChange}/>
+              <input type="password" name="password" placeholder="password" ref={this.psswRef} required/>
             </div>
             <br/>
             <input type="submit" value="Iniciar sesion"/>
@@ -49,7 +35,7 @@ class Login extends PureComponent{
   }
 
   render(){
-    return this.renderLogin();
+    return this.renderLogin(this.props.app.state.user);
   }
 }
 

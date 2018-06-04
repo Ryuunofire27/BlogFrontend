@@ -1,82 +1,22 @@
-import React, { Component } from 'react';
-import Home from './home/Home';
+import React from 'react';
+import { Home } from './home/Home';
 import Login from './login/Login';
-import Post from './posts/Post';
+import { Post } from './posts/Post';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Register from './register/Register';
+import { Register } from './register/Register';
 import Editor from './editor/Editor';
-import axios from 'axios';
+import { AppContext } from '../AppContext';
 
-class Content extends Component{
-  constructor(props){
-    super(props);
-    
-    this.state = {
-      user: this.props.user,
-      posts: null,
-      postById: null
-    };
-
-    this.getPosts = this.getPosts.bind(this);
-    this.getPostById = this.getPostById.bind(this);
-  }
-
-  componentWillMount(){
-    this.setState({ user: this.props.user });
-  }
-
-  componentWillUnmount(){
-    this.setState({ user: null });
-  }
-
-  componentWillReceiveProps(){
-    this.setState({ user: this.props.user })
-  }
-
-  renderLogin(){
-    return <Login user={this.props.user} loginController={this.props.loginController}/>;
-  }
-
-  getPosts(){
-    axios
-      .get('http://localhost:8080/post')
-      .then((res) => {
-        this.setState({
-          posts: res.data.posts,
-        });
-      })
-      .catch(err => console.log(err))
-  }
-
-  getPostById(id){
-    axios
-        .get('http://localhost:8080/post/' + id)
-        .then((res) => {
-          this.setState({
-            postById: res.data.post,
-          });
-        })
-        .catch(err => console.log(err))
-  }
-
-  logout(){
-    this.props.logoutController();
-    return <Redirect to="/"/>
-  }
-  render(){
+export const Content = (props) => {
     return (
       <main>
         <Switch>
-          <Route exact path="/" component={ () => <Home getPosts={this.getPosts} posts={this.state.posts}/>} />
-          <Route exact path="/login" component={() => this.renderLogin()}/>
-          <Route exact path="/logout" component={() => this.logout()}/>
-          <Route exact path="/register" component={ Register }/>
-          <Route exact path="/profile/write" component={ Editor } />
-          <Route exact path="/post/:postId" component={ ({ match }) => <Post posts={this.state.posts} post={this.state.postById} user={this.state.user} match={match} getPost={this.getPostById}/>}/>
+          <Route exact path="/" component={ Home } />
+          <Route exact path="/login" component={() => <AppContext.Consumer>{app => <Login app={app} />}</AppContext.Consumer>}/>
+          <Route exact path="/register" component={() => <AppContext.Consumer>{app => <Register app={app} />}</AppContext.Consumer>}/>
+          <Route exact path="/profile/write" component={ () => props.user ? Editor : <Redirect to="/"/>} />
+          <Route exact path="/post/:postId" component={ ({ match }) => <AppContext.Consumer>{app => <Post match={match} app={app}/>}</AppContext.Consumer>}/>}/>
         </Switch>
       </main>
     );
-  }
-}
-
-export default Content;
+};

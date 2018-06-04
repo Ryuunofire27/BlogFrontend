@@ -2,38 +2,19 @@ import React, { PureComponent } from 'react';
 import axios from 'axios';
 
 class Comment extends PureComponent{
-  constructor(props){
-    super(props);
-
-    this.state = {
-      comment: null,
-      responses: null,
-      textarea: null,
-      isClicked: false,
-      user: null,
-      isLiked: this.props.user ? this.props.comment.like.indexOf(this.props.user._id) != -1 ? true : false : false,
-      isDislike: this.props.user ? this.props.comment.dislike.indexOf(this.props.user._id) != -1 ? true : false : false
-    };
-
-    this.renderComment = this.renderComment.bind(this);
-    //this.renderResponses = this.renderResponses.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleSeeResponses = this.handleSeeResponses.bind(this);
-    this.handleLike = this.handleLike.bind(this);
-    this.handleDislike = this.handleDislike.bind(this);
-  }
+  state = {
+    comment: null,
+    responses: null,
+    textarea: null,
+    isClicked: false,
+    isLiked: this.props.user ? this.props.comment.like.indexOf(this.props.user._id) != -1 ? true : false : false,
+    isDislike: this.props.user ? this.props.comment.dislike.indexOf(this.props.user._id) != -1 ? true : false : false
+  };
 
   componentWillMount(){
     this.setState({
       textarea: this.refs.textarea,
-      comment: this.props.comment,
-      user: this.props.user
-    });
-  }
-
-  componentDidUpdate(){
-    this.setState({
-      user: this.props.user
+      comment: this.props.comment
     });
   }
 
@@ -50,9 +31,10 @@ class Comment extends PureComponent{
   }
 
   handleLike(){
+    const user = this.props.user;
     const add = this.state.isLiked ? -1 : 1;
     axios
-      .put(`http://localhost:8080/user/${this.state.user._id}/comment/${this.state.comment._id}/like`, { add })
+      .put(`http://localhost:8080/user/${user._id}/comment/${this.state.comment._id}/like`, { add })
       .then((res) => {
         if(!res.data.err) this.setState({ isLiked: !this.state.isLiked, comment: res.data  });
       })
@@ -68,16 +50,17 @@ class Comment extends PureComponent{
   }
 
   handleDislike(){
+    const user = this.props.user;
     const add = this.state.isDislike ? -1 : 1;
     axios
-      .put(`http://localhost:8080/user/${this.state.user._id}/comment/${this.state.comment._id}/dislike`, { add })
+      .put(`http://localhost:8080/user/${user._id}/comment/${this.state.comment._id}/dislike`, { add })
       .then((res) => {
         if(!res.data.err) this.setState({ isDislike: !this.state.isDislike, comment: res.data  });
       })
       .catch((err) => console.log(err));
     if(this.state.isLiked) {
       axios
-        .put(`http://localhost:8080/user/${this.state.user._id}/comment/${this.state.comment._id}/like`, { add: -1 })
+        .put(`http://localhost:8080/user/${user._id}/comment/${this.state.comment._id}/like`, { add: -1 })
         .then((res) => {
           if(!res.data.err) this.setState({ isLiked: false, comment: res.data })
         })
@@ -85,12 +68,12 @@ class Comment extends PureComponent{
     }
   }
 
-  renderComment(){
+  renderComment(user){
     return (
       <div>
         <p>{this.state.comment.text}</p>
         <div className="comment-icons">
-          {this.state.user ? this.state.user._id == this.state.comment.user ? 
+          {this.state.user ? user._id == this.state.comment.user ? 
             <span>
               <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
             </span>
@@ -146,7 +129,7 @@ class Comment extends PureComponent{
   render(){
     return (
       <div className="comment">
-        {this.renderComment()}
+        {this.renderComment(this.props.user)}
       </div>
     );
   }

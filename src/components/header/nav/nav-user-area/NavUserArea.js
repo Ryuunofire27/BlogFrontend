@@ -2,45 +2,32 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom'
 
 class NavUserArea extends PureComponent{
-  constructor(props){
-    super(props);
-    
-    this.state = {
-      user: null,
-      isClicked: false
-    };
+  state = {
+    isClicked: false
+  };
 
-    this.handleClick = this.handleClick.bind(this);
-    this.logout = this.logout.bind(this);
-    this.login = this.login.bind(this);
-  }
-
-  componentWillMount(){
-    this.setState({ user: this.props.user });
-  }
-
-  componentDidUpdate(){
-    this.setState({ user: this.props.user });
-  }
-
-  handleClick(){
+  handleClick = () => {
     this.setState({isClicked: !this.state.isClicked});
   }
 
-  logout(){
+  handleLogout = () => {
+    this.props.app.fn.logoutController();
+  }
+
+  logout = (user) => {
     return (
       <div className="header-user-area" onClick={this.handleClick}>
-        <img className="header-user-area-img" src={this.state.user.picture}/>
+        <img className="header-user-area-img" src={user.picture}/>
         <span className="header-user-area-span">Carlos Daniel Villagomez Rodriguez</span>
         <ul className={!this.state.isClicked ? "header-user-area-options-hidden" : "header-user-area-options"}>
           <li><Link to="/perfil">perfil</Link></li>
-          <li><Link to="/logout">logout</Link></li>
+          <li><Link to="/" onClick={this.handleLogout}>logout</Link></li>
         </ul>
       </div>
     );
   }
 
-  login(){
+  login = () => {
     return (
       <ul>
         <li><Link to="/login">Login</Link></li>
@@ -49,17 +36,16 @@ class NavUserArea extends PureComponent{
     );
   }
 
-  renderArea(){
-    return this.state.user ?  this.logout() : this.login();
+  renderArea = (user) => {
+    return user ?  this.logout(user) : this.login();
   }
 
   render(){
     return(
       <div className="user-area">
-        {this.renderArea()}
+        {this.renderArea(this.props.app.state.user)}
       </div>
-    )
+    );
   }
 }
-
 export default NavUserArea;

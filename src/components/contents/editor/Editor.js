@@ -3,30 +3,23 @@ import ME from './MarkdownEditor';
 import Modal from './Modal';
 
 class Editor extends PureComponent{
-  constructor(props){
-    super(props);
-
-    this.state = {
-      elValue: null,
-      value: '',
-      isClicked: false,
-      urlImg: null
-    }
-
-    this.setElValue = this.setElValue.bind(this);
-    this.changeClick = this.changeClick.bind(this);
+  state = {
+    elValue: null,
+    value: '',
+    isClicked: false,
+    urlImg: null
   }
 
-  changeClick(){
+  changeClick = () => {
     this.setState({ isClicked: !this.state.isClicked });
   }
 
 
-  setElValue(el){
+  setElValue = (el) => {
     this.setState({ elValue: el});
   }
 
-  renderForm(){
+  renderForm = () => {
     return this.state.isClicked ? <Modal changeClick={this.changeClick} value={this.state.elValue.value}/> : '';
   }
 

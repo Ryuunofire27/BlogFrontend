@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import MD from 'react-markdown';
 
@@ -10,26 +10,18 @@ function RouterLink(props){
   );
 }
 
-class Card extends PureComponent{
-  
-  
-  renderMD(){
-    return this.props.postData ? <MD source={this.props.postData.extract} renderers={{Link: RouterLink}}/> : <div></div>
-  }
-  render(){
-    return (
-      <div className="card">
-        <div className="card-img">
-          <Link to={`/post/${this.props.postData._id}`}>
-            <img src={ this.props.postData ? this.props.postData.img : ""}/>
-          </Link>
-        </div>
-        <div className="card-content">
-          {this.renderMD()}
-        </div>
+export const Card = (props) => {
+  const postData = props.postData;
+  return (
+    <div className="card">
+      <div className="card-img">
+        <Link to={`/post/${postData._id}`}>
+          <img src={ postData ? postData.img : ""}/>
+        </Link>
       </div>
-    );
-  }
+      <div className="card-content">
+        {postData && <MD source={postData.extract} renderers={{Link: RouterLink}}/>}
+      </div>
+    </div>
+  );
 }
-
-export default Card;
